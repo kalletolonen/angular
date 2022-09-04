@@ -1,0 +1,47 @@
+Test: {{ model | json }}
+<div [hidden]="submitted">
+    <div class="form-group">
+        <form #teacherForm="ngForm" (ngSubmit)="onSubmit()">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name"
+                #name="ngModel">
+            <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+                A name is required.
+            </div>
+            <label for="studentGPA">Student GPA</label>
+            <input type="text" class="form-control" id="studentGPA" [(ngModel)]="model.studentGPA" name="studentGPA"
+                #name="ngModel">
+            <label for="subject">Subject</label>
+            <select class="form-control" id="subject" required [(ngModel)]="model.subject" name="subject"
+                #name="ngModel">
+                <option *ngFor="let subject of subjects" [value]="subject">
+                    {{subject}}
+                </option>
+            </select>
+            <br>
+            <button type="button" class="btn btn-default" (click)="newTeacher(); teacherForm.reset()">
+                New Teacher
+            </button> -
+            <button type="submit" class="btn btn-success" [disabled]="!teacherForm.form.valid">
+                Submit changes
+            </button>
+        </form>
+    </div>
+</div>
+<div [hidden]="!submitted">
+    <h2>You submitted the following:</h2>
+    <div class="row">
+        <div class="col-xs-3">Name</div>
+        <div class="col-xs-9">{{ model.name }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3">Subject</div>
+        <div class="col-xs-9">{{ model.subject }}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3">Student's GPA score</div>
+        <div class="col-xs-9">{{ model.studentGPA }}</div>
+    </div>
+    <br>
+    <button type="button" class="btn btn-primary" (click)="submitted=false">Edit</button>
+</div>
