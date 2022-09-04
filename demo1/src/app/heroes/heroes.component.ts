@@ -14,8 +14,6 @@ export class HeroesComponent implements OnInit {
 
   constructor(private heroService: HeroService, private messageService: MessageService) { } //A private heroservice is created by the constructor
 
-  selectedHero?: Hero; //Defines that the variable must be of Hero-type? If not then nothing happens?
-
   heroes: Hero[] = [] //Heroes is declared as an empty list of Hero[]-objects
 
   getHeroes(): void {
@@ -24,9 +22,18 @@ export class HeroesComponent implements OnInit {
     //It uses the asynchronous method of GETting stuff from the server
   }
 
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero; //will replace the current hero with the one that the user clicks on
-    this.messageService.add(`${hero.name}`) //HOXHOX -> the letter is not ', it's tilde (` ` `)
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
+  }
+
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    this.heroService.deleteHero(hero.id).subscribe();
   }
 
   ngOnInit(): void {
